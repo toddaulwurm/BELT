@@ -1,0 +1,73 @@
+@using System.Text.RegularExpressions
+@{
+    ViewData["Title"] = "Dashboard";
+}
+@model Shindig
+
+<div class="container">
+    <a href="/logout" class="btn btn-dark">Logout</a>
+    <a href="/Dashboard" class="btn btn-success">Home</a>
+    <h1>Hey, @ViewBag.User.Name! <br>Here Are the details for the Shindig @ViewBag.OneModel.Title</h1>
+    <h2>Coordinator: @ViewBag.OneModel.User.Name</h2>
+    <h2>Date: @ViewBag.OneModel.Date</h2>
+    <h2>EndTime: @ViewBag.OneModel.EndTime</h2>
+    <h3>Guest List:</h3>
+    <ul>
+        @{
+            foreach(RSVP rsvp in ViewBag.GuestList)
+            {
+                <li>@rsvp.User.Name</li>
+            }
+        }
+    </ul>
+    @{
+        if(ViewBag.OneModel.UserId == ViewBag.User.UserId)
+        {
+            <td><a class="btn btn-danger" href="/DeleteShindig/@ViewBag.OneModel.ShindigId">Delete</a></td>
+        }
+        else
+        {
+            Shindig OneModel = ViewBag.OneModel;
+            if(OneModel.RSVPs.Any(rsvp => rsvp.UserId == ViewBag.User.UserId))
+            {
+                <td><a href="/rsvp/@ViewBag.OneModel.ShindigId" class="btn btn-warning">Leave</a></td>
+            }
+            else
+            {   
+                User one = ViewBag.User;
+                if(one.RSVPs.Count != 0)
+                {
+                    DateTime ThisStart = @OneModel.Date;
+                    DateTime ThisEnd = @OneModel.EndTime;
+                    int counter = 0;
+                    foreach(RSVP rsvp in ViewBag.User.RSVPs)
+                    {
+                        DateTime OtherStart = rsvp.Shindig.Date;
+                        DateTime OtherEnd = rsvp.Shindig.EndTime;
+                        if(ThisStart<OtherEnd && OtherStart < ThisEnd)
+                        {
+                            counter++;
+                            break;
+                        }
+                        else if(OtherStart < ThisEnd && ThisStart < OtherEnd)
+                        {
+                            counter++;
+                            break;
+                        }
+                    }
+                    if(counter >0)
+                    {
+                        <td class="btn btn-warning">You're Busy </td>
+                    }
+                    else{
+                        <td><a href="/rsvp/@OneModel.ShindigId" class="btn btn-success">Join in loop</a></td>
+                    }
+                }
+                else
+                {
+                    <td><a href="/rsvp/@OneModel.ShindigId" class="btn btn-success">Join</a></td>
+                }
+            }
+        }
+    }
+</div>

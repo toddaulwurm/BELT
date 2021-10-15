@@ -1,0 +1,92 @@
+@using System.Text.RegularExpressions
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+
+
+<div class="container">
+    <a href="/logout" class="btn btn-dark">Logout</a>
+    <div class="topy">
+        <h1>Welcome, @ViewBag.User.Name, to the SHINDIG!</h1>
+        <img src="~/fireworks-png-clip-art-transparent-background-fireworks-clipart-115628631253xdddabzr2.png" alt="fireworks">
+    </div>
+    <h3><a href="/newshindig">New Shindig</a></h3>
+        
+    <table>
+        <thead>
+            <th>Shindig</th>
+            <th>Date</th>
+            <th>Duration</th>
+            <th>Coordinator</th>
+            <th># of Guests</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            @{
+                foreach(Shindig shindig in ViewBag.AllShindigs)
+                {
+                    if(@shindig.EndTime > DateTime.Now)
+                    {
+                    <tr>
+                        <td><a href="/ReadShindig/@shindig.ShindigId">@shindig.Title</a></td>
+                        <td>@shindig.Date.ToString("MMMM dd @ h:mm tt") - @shindig.EndTime.ToString("MMMM dd @ h:mm tt")</td>
+                        <td>@shindig.Duration @shindig.DurationType</td>
+                        <td>@shindig.User.Name</td>
+                        <td>@shindig.RSVPs.Count</td>
+                        @{
+                            if(@shindig.UserId == @ViewBag.User.UserId)
+                            {
+                                <td><a class="btn btn-danger" href="/DeleteShindig/@shindig.ShindigId">Delete</a></td>
+                            }
+                            else
+                            {
+                                if(@shindig.RSVPs.Any(rsvp => rsvp.UserId == ViewBag.User.UserId))
+                                {
+                                    <td><a href="/rsvp/@shindig.ShindigId" class="btn btn-warning">Leave</a></td>
+                                }
+                                else
+                                {
+                                    if(ViewBag.User.RSVPs.Count != 0)
+                                    {
+                                        DateTime ThisStart = @shindig.Date;
+                                        DateTime ThisEnd = @shindig.EndTime;
+                                        int counter = 0;
+                                        foreach(RSVP rsvp in ViewBag.User.RSVPs)
+                                        {
+                                            DateTime OtherStart = rsvp.Shindig.Date;
+                                            DateTime OtherEnd = rsvp.Shindig.EndTime;
+                                            if(ThisStart<OtherEnd && OtherStart < ThisEnd)
+                                            {
+                                                counter++;
+                                                break;
+                                            }
+                                            else if(OtherStart < ThisEnd && ThisStart < OtherEnd)
+                                            {
+                                                counter++;
+                                                break;
+                                            }
+                                        }
+                                        if(counter >0)
+                                        {
+                                            <td class="btn btn-warning">You're Busy </td>
+                                        }
+                                        else{
+                                            <td><a href="/rsvp/@shindig.ShindigId" class="btn btn-success">Join in loop</a></td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td><a href="/rsvp/@shindig.ShindigId" class="btn btn-success">Join</a></td>
+                                    }
+                                }
+                            }
+                        }
+                    </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

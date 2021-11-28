@@ -7,10 +7,10 @@
 <div class="container">
     <a href="/logout" class="btn btn-dark">Logout</a>
     <a href="/Dashboard" class="btn btn-success">Home</a>
-    <h1>Hey, @ViewBag.User.Name! <br>Here Are the details for the Shindig @ViewBag.OneModel.Title</h1>
+    <h1>Hey, @ViewBag.User.Name! <br>@ViewBag.OneModel.Title</h1>
     <h2>Coordinator: @ViewBag.OneModel.User.Name</h2>
-    <h2>Date: @ViewBag.OneModel.Date</h2>
-    <h2>EndTime: @ViewBag.OneModel.EndTime</h2>
+    @* <h2>Date: @ViewBag.OneModel.Date</h2>
+    <h2>EndTime: @ViewBag.OneModel.EndTime</h2> *@
     <h3>Guest List:</h3>
     <ul>
         @{
@@ -32,7 +32,7 @@
             {
                 <td><a href="/rsvp/@ViewBag.OneModel.ShindigId" class="btn btn-warning">Leave</a></td>
             }
-            else
+            @* else
             {   
                 User one = ViewBag.User;
                 if(one.RSVPs.Count != 0)
@@ -62,11 +62,10 @@
                     else{
                         <td><a href="/rsvp/@OneModel.ShindigId" class="btn btn-success">Join in loop</a></td>
                     }
-                }
-                else
-                {
-                    <td><a href="/rsvp/@OneModel.ShindigId" class="btn btn-success">Join</a></td>
-                }
+                } *@
+            else
+            {
+                <td><a href="/rsvp/@OneModel.ShindigId" class="btn btn-success">Join</a></td>
             }
         }
     }

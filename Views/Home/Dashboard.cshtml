@@ -8,19 +8,19 @@
 <div class="container">
     <a href="/logout" class="btn btn-dark">Logout</a>
     <div class="topy">
-        <h1>Welcome, @ViewBag.User.Name, to the SHINDIG!</h1>
+        <h1>Welcome to CLASS BREW, @ViewBag.User.Name!</h1>
         <img src="~/fireworks-png-clip-art-transparent-background-fireworks-clipart-115628631253xdddabzr2.png" alt="fireworks">
     </div>
-    <h3><a href="/newshindig">New Shindig</a></h3>
+    <h3><a href="/newshindig">Create New Class</a></h3>
         
     <table>
         <thead>
-            <th>Shindig</th>
+            <th>Class Name</th>
             <th>Date</th>
             <th>Duration</th>
-            <th>Coordinator</th>
-            <th># of Guests</th>
-            <th>Action</th>
+            <th>Brewer Name</th>
+            <th># of Followers</th>
+            <th>Actions</th>
         </thead>
         <tbody>
             @{
@@ -43,7 +43,7 @@
                             {
                                 if(@shindig.RSVPs.Any(rsvp => rsvp.UserId == ViewBag.User.UserId))
                                 {
-                                    <td><a href="/rsvp/@shindig.ShindigId" class="btn btn-warning">Leave</a></td>
+                                    <td><a href="/rsvp/@shindig.ShindigId" class="btn btn-warning">Unfollow</a></td>
                                 }
                                 else
                                 {
@@ -77,7 +77,7 @@
                                     }
                                     else
                                     {
-                                        <td><a href="/rsvp/@shindig.ShindigId" class="btn btn-success">Join</a></td>
+                                        <td><a href="/rsvp/@shindig.ShindigId" class="btn btn-success">Follow</a></td>
                                     }
                                 }
                             }

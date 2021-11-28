@@ -105,7 +105,7 @@ namespace BELT.Controllers
             ViewBag.AllShindigs = _context.Shindigs
                 .Include(shin => shin.RSVPs)
                 .ThenInclude(rsvp => rsvp.User)
-                .OrderBy(shin => shin.Date)
+                // .OrderBy(shin => shin.Date)
                 .ToList();
 
             ViewBag.AllUsers = _context.Users.ToList();
@@ -128,6 +128,9 @@ namespace BELT.Controllers
         {
             if(ModelState.IsValid)
             {
+                _context.Add(newShindig);
+                _context.SaveChanges();
+                return RedirectToAction("Dashboard");
                 if(newShindig.DurationType == "minutes")
                 {
                     TimeSpan newduration = new TimeSpan (0, newShindig.Duration, 0);
